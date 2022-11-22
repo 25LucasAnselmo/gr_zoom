@@ -12,20 +12,19 @@ https://pub.dev/packages/gr_zoom
 
 After install the library, must run the follow script to get some sdk stuff for the first time:
 ```shell script
-flutter pub run zoom:unzip_zoom_sdk
+flutter pub run gr_zoom:unzip_zoom_sdk
 ```
 ## Installation from github
 
 ```yaml
-  zoom:
+  gr_zoom:
     git:
       url: git@github.com:25LucasAnselmo/gr_zoom.git
       ref: main
-      path: zoom
 ```
 After install the library, must run the follow script to get some sdk stuff for the first time:
 ```shell script
-flutter pub run zoom:unzip_zoom_sdk
+flutter pub run gr_zoom:unzip_zoom_sdk
 ```
 
 ### iOS
@@ -64,13 +63,13 @@ If you want to use the iOS Simulator to test your app, you will need to ensure y
 
 To use the Dev Zoom SDK, run the following
 ```shell script
-flutter pub run zoom:unzip_zoom_sdk dev
+flutter pub run gr_zoom:unzip_zoom_sdk dev
 ```
     
 To switch back to the normal Zoom SDK, simply run
 
 ```shell script
-flutter pub run zoom:unzip_zoom_sdk
+flutter pub run gr_zoom:unzip_zoom_sdk
 ```
 
 ### Android
