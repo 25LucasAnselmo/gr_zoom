@@ -5,3 +5,7 @@
 ## [0.0.2] - Fix Unzip zoom sdk
 
 * Fix unzip code
+
+## [0.0.2+1] - Fix Unzip zoom sdk
+
+* Update README
