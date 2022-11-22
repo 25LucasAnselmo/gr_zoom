@@ -1,7 +1,9 @@
 name: gr_zoom
 description: A Flutter plugin for the Zoom Client SDK.
 version: 0.0.1
-repository: https://github.com/driftboat/flutter_zoom/tree/main/zoom
+repository: https://github.com/25LucasAnselmo/gr_zoom
+author: Lucas Anselmo <lucasmartins.m.25@gmail.com>
+homepage: https://github.com/25LucasAnselmo
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

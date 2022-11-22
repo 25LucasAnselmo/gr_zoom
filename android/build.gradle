@@ -1,4 +1,4 @@
-group 'com.webcare.gr_zoom'
+group 'com.webcare.zoom'
 version '1.0'
 
 buildscript {
