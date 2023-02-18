@@ -50,6 +50,24 @@ Diable BITCODE in the `ios/Podfile`:
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+    if target.name == "gr_zoom"
+      puts("Found target membership zoom.")
+      all_filerefs = installer.pods_project.files
+      all_filerefs.each do |fileref|
+        if fileref.path.end_with? "MobileRTC.xcframework"
+          puts("Found MobileRTC.xcframework fileref.")
+          build_phase = target.frameworks_build_phase
+          puts("Determining if zoom build phase needs correction.")
+          unless build_phase.files_references.include?(fileref)
+            puts("Adding MobileRTC.xcframework to zoom target")
+            build_phase.add_file_reference(fileref)
+          end
+        end
+      end
+      installer.pods_project.build_configurations.each do |config|
+        config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+      end
+    end
     target.build_configurations.each do |config|
       config.build_settings['ENABLE_BITCODE'] = 'NO'
     end
