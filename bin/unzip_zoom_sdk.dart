@@ -72,7 +72,8 @@ Future<void> checkAndDownloadSDK(String location) async {
 
   if (!exists) {
     await downloadFile(
-        Uri.parse('https://com21-static.s3.sa-east-1.amazonaws.com/zoom/ios/5.13.5/ios-arm64/MobileRTC?dl=1'),
+        Uri.parse(
+            'https://com21-static.s3.sa-east-1.amazonaws.com/zoom/ios/5.14.5/ios-arm64/MobileRTC?dl=1'),
         iosSDKFile);
   }
 
@@ -82,7 +83,8 @@ Future<void> checkAndDownloadSDK(String location) async {
 
   if (!exists) {
     await downloadFile(
-        Uri.parse('https://com21-static.s3.sa-east-1.amazonaws.com/zoom/ios/5.13.5/ios-arm64_x86_64-simulator/MobileRTC'),
+        Uri.parse(
+            'https://com21-static.s3.sa-east-1.amazonaws.com/zoom/ios/5.14.5/ios-arm64_x86_64-simulator/MobileRTC'),
         iosSimulateSDKFile);
   }
 
@@ -91,7 +93,7 @@ Future<void> checkAndDownloadSDK(String location) async {
   if (!exists) {
     await downloadFile(
         Uri.parse(
-            'https://com21-static.s3.sa-east-1.amazonaws.com/zoom/android/5.13.5/commonlib.aar?dl=1'),
+            'https://com21-static.s3.sa-east-1.amazonaws.com/zoom/android/5.14.5/commonlib.aar?dl=1'),
         androidCommonLibFile);
   }
   var androidRTCLibFile = location + '/android/libs/mobilertc.aar';
@@ -99,7 +101,7 @@ Future<void> checkAndDownloadSDK(String location) async {
   if (!exists) {
     await downloadFile(
         Uri.parse(
-            'https://com21-static.s3.sa-east-1.amazonaws.com/zoom/android/5.13.5/mobilertc.aar?dl=1'),
+            'https://com21-static.s3.sa-east-1.amazonaws.com/zoom/android/5.14.5/mobilertc.aar?dl=1'),
         androidRTCLibFile);
   }
 }

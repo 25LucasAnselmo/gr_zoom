@@ -138,4 +138,10 @@
 @return If the function succeeds, the return value is MobileRTCSDKError_Success. Otherwise the function fails and returns an error. To get extended error information, see [MobileRTCSDKError] enum.
 */
 - (MobileRTCSDKError)stopIncomingAudio:(BOOL)enabled;
+
+/*!
+@brief Get the audio type supported by the current meeting. See [MobileRTCInMeetingSupportAudioType].
+@return If the function succeeds, it will return the type. The value is the 'bitwise OR' of each supported audio type.
+*/
+- (int)getSupportedMeetingAudioType;
 @end

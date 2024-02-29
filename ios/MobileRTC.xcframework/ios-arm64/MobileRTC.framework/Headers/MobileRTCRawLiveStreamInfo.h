@@ -22,5 +22,10 @@
  */
 @property(nonatomic, copy, readonly) NSString * _Nullable broadcastUrl;
 
+/*!
+ @brief Broadcast Name 
+ */
+@property(nonatomic, copy, readonly) NSString * _Nullable broadcastName;
+
 @end
 
