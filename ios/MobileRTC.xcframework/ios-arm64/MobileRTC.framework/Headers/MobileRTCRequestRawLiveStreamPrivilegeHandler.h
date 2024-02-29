@@ -38,6 +38,12 @@
 - (NSString *)getBroadcastUrl;
 
 /*!
+ @brief Get the broadcast name.
+ @return If the function succeeds, the return value is the broadcast name.
+ */
+- (NSString *)getBroadcastName;
+
+/*!
  @brief Allows the user to start raw live stream and finally self-destroy.
  */
 - (BOOL)grantRawLiveStreamPrivilege;

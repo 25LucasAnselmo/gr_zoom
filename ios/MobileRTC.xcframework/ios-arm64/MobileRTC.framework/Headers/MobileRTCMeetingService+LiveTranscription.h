@@ -19,6 +19,25 @@
 - (BOOL)isMeetingSupportCC;
 
 /*!
+ @brief Query if the user can disable captions.
+ @return YES means that the host can disable captions.
+ */
+- (BOOL)canDisableCaptions;
+
+/*!
+ @brief Enable or disable captions.
+ @param bEnable YES means that captions are enabled.  NO means that captions are disabled.
+ @return If the function succeeds, the return value is MobileRTCSDKError_Success.  Otherwise the function  returns a calling error. For more details, see \link MobileRTCSDKError \endlink enum.
+ */
+- (MobileRTCSDKError)enableCaptions:(BOOL)bEnable;
+
+/*!
+ @brief Query if the captions enabled.
+ @return YES  means that captions are enabled.
+*/
+- (BOOL)isCaptionsEnabled;
+
+/*!
  @brief Query if the user is can be assigned to send closed caption.
  @param userid the user id.
  @return TRUE means that the user can be assigned to send closed caption.

@@ -24,6 +24,8 @@
 @class MobileRTCMeetingParameter;
 @class MobileRTCSignInterpreterLanguage;
 @class MobileRTCRequestLocalRecordingPrivilegeHandler;
+@class MobileRTCMeetingInviteActionItem;
+@class MobileRTCMeetingShareActionItem;
 
 #pragma mark - MobileRTCMeetingServiceDelegate
 /*!
@@ -140,18 +142,6 @@
 - (void)onCameraNoPrivilege;
 
 /*!
- @brief The free meeting ends in 10 minutes.
- @param host If YES, the user is the original host of the meeting.
- @param freeUpgrade If YES, the meeting can be upgraded and the free meeting limitation is removed.
- @param first If YES, this is the first meeting which can ignore the limitation.
- @param completion The SDK calls the module to upgrade the current meeting if the parameter UPGRADE is YES.
- */
-- (void)onFreeMeetingReminder:(BOOL)host
-               canFreeUpgrade:(BOOL)freeUpgrade
-                  isFirstGift:(BOOL)first
-                   completion:(void (^_Nonnull)(BOOL upgrade))completion DEPRECATED_ATTRIBUTE;
-
-/*!
  @brief The result of a free meeting upgrade attempt has been received.
  @param result ZERO(0) means the upgrade was successful, otherwise it failed.
  */
@@ -185,7 +175,7 @@
  @param array <MobileRTCMeetingInviteActionItem *>Custom invitation actions to be added.
  @return YES: The developer takes a custom action and the SDK does nothing. NO: The SDK still takes its default action.
  */
-- (BOOL)onClickedInviteButton:(UIViewController * _Nonnull)parentVC addInviteActionItem:(NSMutableArray * _Nullable)array;
+- (BOOL)onClickedInviteButton:(UIViewController * _Nonnull)parentVC addInviteActionItem:(NSMutableArray <MobileRTCMeetingInviteActionItem *>* _Nullable)array;
 
 /*!
  @brief The audio button in the UI has been clicked.
@@ -207,7 +197,7 @@
  @return YES: The developer takes a custom action and the SDK does nothing. NO: The SDK still takes its default action.
  NO if user wants to custom Share Action Item, add items to Share ActionSheet via MobileRTCMeetingShareActionItem. Otherwise YES, the user uses the default UI.
  */
-- (BOOL)onClickedShareButton:(UIViewController * _Nonnull)parentVC addShareActionItem:(NSMutableArray * _Nonnull)array;
+- (BOOL)onClickedShareButton:(UIViewController * _Nonnull)parentVC addShareActionItem:(NSMutableArray <MobileRTCMeetingShareActionItem *>* _Nonnull)array;
 
 /*!
  @brief The meeting end button has been clicked.
@@ -350,6 +340,59 @@
 @param handler the host admit or decline the request through this handler.
 */
 - (void)onRequestLocalRecordingPrivilegeReceived:(MobileRTCRequestLocalRecordingPrivilegeHandler * _Nullable)handler;
+
+/**
+* Callback event when a meeting is suspended.
+*/
+- (void)onSuspendParticipantsActivities;
+
+/**
+* Sink the event that lets participants start a video
+*
+* @param allow YES allow. if NO disallow
+*/
+- (void)onAllowParticipantsStartVideoNotification:(BOOL)allow;
+
+/**
+* Sink the event that lets participants rename them
+*
+* @param allow YES allow.If NO,participants may not rename themselves
+*/
+- (void)onAllowParticipantsRenameNotification:(BOOL)allow;
+
+/**
+* Sink the event that lets participants unmute them
+*
+* @param allow YES allow. If NO, participants may not unmute themselves
+*/
+- (void)onAllowParticipantsUnmuteSelfNotification:(BOOL)allow;
+
+/**
+* Sink the event that lets participants share a new white board
+*
+* @param  allow YES allow.if NO.participants may not share new white boards
+*/
+- (void)onAllowParticipantsShareWhiteBoardNotification:(BOOL)allow;
+
+/**
+ * Sink the event that lets participants allow to share
+ *
+ * @param allow YES allow.if NO.participants may not share
+ */
+- (void)onAllowParticipantsShareStatusNotification:(BOOL)allow;
+/**
+* Sink the event that allow a meeting lock status change
+*
+* @param isLock YES, the status is locked. If NO, the status is unlocked.
+*/
+- (void)onMeetingLockStatus:(BOOL)isLock;
+
+/*!
+ @brief Callback event that the request local recording privilege changes.
+ @param status Value of request local recording privilege status {@link  LocalRecordingRequestPrivilegeStatus}
+ */
+- (void)onRequestLocalRecordingPriviligeChanged:(MobileRTCLocalRecordingRequestPrivilegeStatus)status;
+
 @end
 
 #pragma mark - MobileRTCAudioServiceDelegate
@@ -441,7 +484,7 @@
  @brief The list of spotlit users has changed.
  @param spotlightedUserList The users who are currently spotlit.
  */
-- (void)onSpotlightVideoUserChange:(NSArray <NSNumber *>* _Nonnull)spotlightedUserList;
+- (void)onSpotlightVideoUserChange:(NSArray <NSNumber *>* _Nullable)spotlightedUserList;
 
 /*!
  @brief The SDK has stopped the current user's video preview.
@@ -544,13 +587,6 @@
 
 /*!
  @brief A user changes their screen name.
- @param userID Specify the user ID whose screen name changes.
- @param userName The new screen name displayed.
- */
-- (void)onSinkUserNameChanged:(NSUInteger)userID userName:(NSString *_Nonnull)userName DEPRECATED_ATTRIBUTE;
-
-/*!
- @brief A user changes their screen name.
  @param userNameChangedArr The user IDs whose user name(s) changed.
  @warning The old interface virtual void '-(void)onSinkUserNameChanged:userName:' is marked as deprecated, and uses this new callback. This is because in a webinar, when the host renames an attendee, only the attendee could receive the old callback. The host/cohost/panlist is not able to receive it, which leads to the developer not being able to update the UI.
  */
@@ -586,21 +622,6 @@
  @brief A meeting starts by sharing.
  */
 - (void)onAppShareSplash;
-
-/*!
- @brief The sharing starts.
- @param userID The presenter's user ID.
- @warning userID == 0 means that the user stopped sharing.
- @deprecated replace with {@link onSinkSharingStatus:userID:}
- */
-- (void)onSinkMeetingActiveShare:(NSUInteger)userID DEPRECATED_ATTRIBUTE;
-
-/*!
- @brief The sharing content changes.
- @param userID The presenter's user ID.
- @deprecated replace with {@link onSinkSharingStatus:userID:}
- */
-- (void)onSinkMeetingShareReceiving:(NSUInteger)userID DEPRECATED_ATTRIBUTE;
 
 /*!
  @brief The share status changes.
@@ -718,11 +739,6 @@
 - (void)onRequestSignInterpreterToTalk;
 
 /*!
- @brief The host blocks the sign interpreter from talking (mutes them).
- */
-- (void)onDisallowSignInterpreterToTalk DEPRECATED_MSG_ATTRIBUTE("Use -onTalkPrivilegeChanged:(BOOL)hasPrivilege instead");
-
-/*!
  @brief Callback event for the user talk privilege changed. When the interpreter role changed, host changed, host allow or disallow interpreter talk, this will be triggered, and only the sign interpreter itself can get the event.
  @param hasPrivilege Specify whether the user has talk privilege or not
  */
@@ -823,13 +839,13 @@
  @brief Callback event when a question is deleted.
  @param questionIDArray The question IDs.
 */
-- (void)onSinkDeleteQuestion:(NSArray *_Nonnull)questionIDArray;
+- (void)onSinkDeleteQuestion:(NSArray <NSString *>*_Nonnull)questionIDArray;
 
 /*!
  @brief Callback event when an answer is deleted.
  @param answerIDArray The answer IDs.
 */
-- (void)onSinkDeleteAnswer:(NSArray *_Nonnull)answerIDArray;
+- (void)onSinkDeleteAnswer:(NSArray <NSString *>*_Nonnull)answerIDArray;
 
 /*!
  @brief Callback event of the permission change to allow users to ask questions anonymously.
@@ -910,6 +926,24 @@
  @brief Invoke this function when the attendee is not allowed to talk.
 */
 - (void)onSinkSelfDisallowTalkNotification;
+
+/*!
+ @brief Invoke this function when the attendee is allow or not allow to using reaction.
+ @param canReaction If the Reaction is allowed, the result is YES, otherwise NO.
+*/
+- (void)onAllowWebinarReactionStatusChanged:(BOOL)canReaction;
+
+/*!
+ @brief Invoke this function when the attendee is allow or not allow to using raise hand.
+ @param canReaction If the raise hand is allowed, the result is YES, otherwise NO.
+*/
+- (void)onAllowAttendeeRaiseHandStatusChanged:(BOOL)canRaiseHand;
+
+/*!
+ @brief Invoke this function when the attendee is allow to view the participant count.
+ @param canViewParticipantCount If the view participant is allowed, the result is YES, otherwise NO.
+*/
+- (void)onAllowAttendeeViewTheParticipantCountStatusChanged:(BOOL)canViewParticipantCount;
 @end
 
 /*!
@@ -917,6 +951,13 @@
 */
 @protocol MobileRTCLiveTranscriptionServiceDelegate <MobileRTCMeetingServiceDelegate>
 @optional
+
+/**
+ * @brief Sink the event of captions enabled status changed.
+ * @param enable True means the host enables the captions, otherwise means the host disables the captions.
+ */
+- (void)onCaptionStatusChanged:(BOOL)enable;
+
 /*!
  @brief Sink the event of live transcription status.
  @param status The live transcription status. For more details, see MobileRTCLiveTranscriptionStatus
@@ -1110,7 +1151,7 @@
  @param supportCapabilityArray Support capability list.
  @param suggestCapabilityItem Suggest capability.
 */
-- (void)onInitialize:(MobileRTCVideoSender *_Nonnull)rawDataSender supportCapabilityArray:(NSArray *_Nonnull)supportCapabilityArray suggestCapabilityItem:(MobileRTCVideoCapabilityItem *_Nonnull)suggestCapabilityItem;
+- (void)onInitialize:(MobileRTCVideoSender *_Nonnull)rawDataSender supportCapabilityArray:(NSArray <MobileRTCVideoCapabilityItem *>*_Nonnull)supportCapabilityArray suggestCapabilityItem:(MobileRTCVideoCapabilityItem *_Nonnull)suggestCapabilityItem;
 
 /*!
  @brief Send data for initialization.
@@ -1118,7 +1159,7 @@
  @param supportCapabilityArray Support capability list.
  @param suggestCapabilityItem Suggest capability.
 */
-- (void)onPropertyChange:(NSArray *_Nonnull)supportCapabilityArray suggestCapabilityItem:(MobileRTCVideoCapabilityItem *_Nonnull)suggestCapabilityItem;
+- (void)onPropertyChange:(NSArray <MobileRTCVideoCapabilityItem *>*_Nonnull)supportCapabilityArray suggestCapabilityItem:(MobileRTCVideoCapabilityItem *_Nonnull)suggestCapabilityItem;
 
 /*!
  @brief Start send data.

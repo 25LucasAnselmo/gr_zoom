@@ -19,15 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (BOOL)isEmojiReactionEnabled;
 
-/*!
- @brief Send emoji reaction.
- @param type - The type of the emoji reaction.
- @param skinTone - The skintone of the emoji reaction
- @return If the function succeeds, it will return MobileRTCMeetError_Success, otherwise not.
- @deprecated replace with {@link sendEmojiReaction:}
- */
-- (MobileRTCMeetError)sendEmojiReaction:(MobileRTCEmojiReactionType)type reactionSkinTone:(MobileRTCEmojiReactionSkinTone)skinTone  DEPRECATED_MSG_ATTRIBUTE("Use -sendEmojiReaction: instead");
-
 /**
  * @brief Send emoji reaction.
  * @param type - The type of the emoji reaction.
